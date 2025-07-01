@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Relatório de Visitas</title>
+  <title>Relatório de Execução</title>
   <!-- Favicon e metatags para PWA -->
   <link rel="icon" href="favicon.ico" type="favicon.ico">
   <link rel="apple-touch-icon" href="logo ap 03.png">
@@ -331,19 +331,17 @@
     }
 
     function excelDateParaDMY(serial) {
-  // Ajuste para corrigir o bug do Excel (considera 1900 como ano bissexto)
-  const excelEpoch = new Date(1899, 11, 31); // 31/12/1899
-  const daysToAdd = serial - 1; // Subtrai 1 porque o Excel conta errado
+  const excelEpoch = new Date(1899, 11, 30); // Isso já está correto
+  let data = new Date(excelEpoch.getTime() + serial * 86400000);
+
+  // Corrige o erro do Excel sobre o ano bissexto de 1900
+  if (serial < 60) { 
+    data.setDate(data.getDate() - 1);
+  }
   
-  // Cria a data base e adiciona os dias
-  const date = new Date(excelEpoch);
-  date.setDate(excelEpoch.getDate() + daysToAdd);
-  
-  // Formata a data como DD/MM/YYYY
-  const day = String(date.getDate()).padStart(2, '0');
-  const month = String(date.getDate() + 1).padStart(2, '0');
-  const year = date.getFullYear();
-  
+  const day = String(data.getDate()).padStart(2, '0');
+  const month = String(data.getMonth() + 1).padStart(2, '0');
+  const year = data.getFullYear();
   return `${day}/${month}/${year}`;
 }
 
