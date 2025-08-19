@@ -393,7 +393,7 @@
 
       dados.forEach(item => {
     try {
-      let rawData = item["Data"];
+      let rawData = item["Agendado"];
       let dataFormatada = "";
       
       if (typeof rawData === "number") {
@@ -410,9 +410,9 @@
 
           if (dataFormatada) {
             const local = item["Local"]?.trim() || "Local não informado";
-            const promotor = item["Promotor"]?.trim() || "Promotor não informado";
-            const atividade = item["Atividade"]?.trim() || "Atividade não informada";
-            const executado = item["Executado"].toString().toLowerCase() === "sim" ? 1 : 0;
+            const promotor = item["Agente"]?.trim() || "Promotor não informado";
+            const atividade = item["Formulário"]?.trim() || "Atividade não informada";
+            const executado = item["Feito"].toString().toLowerCase() === "sim" ? 1 : 0;
 
             datasSet.add(dataFormatada);
             atividadesSet.add(atividade);
@@ -596,3 +596,4 @@
   </script>
 </body>
 </html>
+
