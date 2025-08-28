@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8" />
   <title>Acompanhamento de Visitas</title>
@@ -11,13 +12,13 @@
   <meta name="description" content="Relatório de Visitas Consolidadas">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  
+
   <!-- CDNs -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  
+
   <style>
     :root {
       --primary-color: #ff9100;
@@ -29,7 +30,7 @@
       --error-color: #c0392b;
       --neutral-color: #7f8c8d;
     }
-    
+
     body {
       margin: 0;
       font-family: 'Poppins', sans-serif;
@@ -47,7 +48,7 @@
       align-items: center;
       justify-content: center;
       gap: 16px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
     }
 
     header img {
@@ -59,7 +60,7 @@
       margin: 0;
       font-weight: 600;
       font-size: clamp(1.2rem, 4vw, 1.6rem);
-      text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
     }
 
     .top-bar {
@@ -76,7 +77,7 @@
       color: var(--text-color);
       padding: 10px 15px;
       border-radius: 8px;
-      border: 1px solid rgba(255,255,255,0.1);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       min-width: 200px;
       font-size: 15px;
       cursor: pointer;
@@ -130,7 +131,7 @@
       color: var(--text-color);
       padding: 12px 18px;
       border-radius: 8px;
-      border: 1px dashed rgba(255,255,255,0.2);
+      border: 1px dashed rgba(255, 255, 255, 0.2);
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -180,7 +181,8 @@
       margin: 0 auto;
     }
 
-    th, td {
+    th,
+    td {
       padding: 12px 14px;
       border: 1px solid #34495e;
       text-align: center;
@@ -196,9 +198,17 @@
       top: 0;
     }
 
-    .executado { background-color: var(--success-color); }
-    .nao-executado { background-color: var(--error-color); }
-    .sem-dado { background-color: var(--neutral-color); }
+    .executado {
+      background-color: var(--success-color);
+    }
+
+    .nao-executado {
+      background-color: var(--error-color);
+    }
+
+    .sem-dado {
+      background-color: var(--neutral-color);
+    }
 
     .loading {
       display: none;
@@ -207,7 +217,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0,0,0,0.7);
+      background: rgba(0, 0, 0, 0.7);
       z-index: 1000;
       justify-content: center;
       align-items: center;
@@ -225,8 +235,13 @@
     }
 
     @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
     }
 
     .empty-state {
@@ -247,26 +262,28 @@
         flex-direction: column;
         align-items: stretch;
       }
-      
+
       header {
         padding: 15px 20px;
       }
-      
+
       .container {
         padding: 0 10px 20px;
       }
-      
+
       .tabela-wrapper {
         padding: 10px;
       }
-      
-      th, td {
+
+      th,
+      td {
         font-size: 12px;
         padding: 8px 10px;
       }
     }
   </style>
 </head>
+
 <body>
   <!-- Loading overlay -->
   <div class="loading" id="loadingOverlay">
@@ -296,7 +313,7 @@
       </label>
       <input type="file" id="fileInput" accept=".xlsx, .xls" />
     </div>
-    
+
     <div class="tabela-wrapper">
       <div id="tabelaContainer">
         <div class="empty-state">
@@ -331,28 +348,28 @@
     }
 
     function excelDateParaDMY(serial) {
-  const excelEpoch = new Date(1899, 11, 30); // Isso já está correto
-  let data = new Date(excelEpoch.getTime() + serial * 86400000);
+      const excelEpoch = new Date(1899, 11, 30);
+      let data = new Date(excelEpoch.getTime() + serial * 86400000);
 
-  // Corrige o erro do Excel sobre o ano bissexto de 1900
-  if (serial < 60) { 
-    data.setDate(data.getDate() - 1);
-  }
-  
-  const day = String(data.getDate()).padStart(2, '0');
-  const month = String(data.getMonth() + 1).padStart(2, '0');
-  const year = data.getFullYear();
-  return `${day}/${month}/${year}`;
-}
+      // Corrige o erro do Excel sobre o ano bissexto de 1900
+      if (serial < 60) {
+        data.setDate(data.getDate() - 1);
+      }
+
+      const day = String(data.getDate()).padStart(2, '0');
+      const month = String(data.getMonth() + 1).padStart(2, '0');
+      const year = data.getFullYear();
+      return `${day}/${month}/${year}`;
+    }
 
     document.getElementById("fileInput").addEventListener("change", async e => {
       const file = e.target.files[0];
       if (!file) return;
-      
+
       try {
         showLoading(true);
         const reader = new FileReader();
-        
+
         reader.onload = evt => {
           try {
             const data = new Uint8Array(evt.target.result);
@@ -367,12 +384,12 @@
             showLoading(false);
           }
         };
-        
+
         reader.onerror = () => {
           showLoading(false);
           alert("Erro ao ler o arquivo. Tente novamente.");
         };
-        
+
         reader.readAsArrayBuffer(file);
       } catch (error) {
         showLoading(false);
@@ -392,21 +409,21 @@
       const atividadesSet = new Set();
 
       dados.forEach(item => {
-    try {
-      let rawData = item["Agendado"];
-      let dataFormatada = "";
-      
-      if (typeof rawData === "number") {
-        dataFormatada = excelDateParaDMY(rawData); // Alterado para usar a nova função
-      } else if (typeof rawData === "string") {
-        const data = new Date(rawData);
-        if (!isNaN(data)) {
-          const day = String(data.getDate()).padStart(2, '0');
-          const month = String(data.getMonth() + 1).padStart(2, '0');
-          const year = data.getFullYear();
-          dataFormatada = `${day}/${month}/${year}`;
-        }
-      }
+        try {
+          let rawData = item["Agendado"];
+          let dataFormatada = "";
+
+          if (typeof rawData === "number") {
+            dataFormatada = excelDateParaDMY(rawData);
+          } else if (typeof rawData === "string") {
+            const data = new Date(rawData);
+            if (!isNaN(data)) {
+              const day = String(data.getDate()).padStart(2, '0');
+              const month = String(data.getMonth() + 1).padStart(2, '0');
+              const year = data.getFullYear();
+              dataFormatada = `${day}/${month}/${year}`;
+            }
+          }
 
           if (dataFormatada) {
             const local = item["Local"]?.trim() || "Local não informado";
@@ -416,31 +433,41 @@
 
             datasSet.add(dataFormatada);
             atividadesSet.add(atividade);
-            
+
+            // agrupar por Local + Promotor + Atividade
             const chave = `${local}__${promotor}__${atividade}`;
             if (!dadosOrganizados[chave]) {
-              dadosOrganizados[chave] = { 
-                Local: local, 
-                Promotor: promotor, 
-                Atividade: atividade, 
-                datas: {}, 
-                total: 0 
+              dadosOrganizados[chave] = {
+                Local: local,
+                Promotor: promotor,
+                Atividade: atividade,
+                RazaoSocial: (item["Razão Social"] || item["Razação Social"] || "").toString().trim() || "Não informado",
+                Endereco: `${item["Endereço"] || ""} ${item["Número"] || ""}`.toString().trim() || "Não informado",
+                CEP: item["CEP"] || "Não informado",
+                Bairro: item["Bairro"] || "Não informado",
+                Municipio: item["Município"] || "Não informado",
+                UF: item["UF"] || "Não informado",
+                datas: {},
+                total: 0
               };
             }
-            
-            dadosOrganizados[chave].datas[dataFormatada] = executado;
+
+            // "Sim" prevalece sobre "Não" na mesma célula
+            if (executado === 1 || !dadosOrganizados[chave].datas[dataFormatada]) {
+              dadosOrganizados[chave].datas[dataFormatada] = executado;
+            }
             dadosOrganizados[chave].total += executado;
           }
         } catch (error) {
-      console.error("Erro ao processar linha:", item, error);
-    }
-  });
+          console.error("Erro ao processar linha:", item, error);
+        }
+      });
 
       datas = Array.from(datasSet).sort((a, b) => {
-  const [diaA, mesA, anoA] = a.split('/').map(Number);
-  const [diaB, mesB, anoB] = b.split('/').map(Number);
-  return new Date(anoA, mesA - 1, diaA) - new Date(anoB, mesB - 1, diaB);
-});
+        const [diaA, mesA, anoA] = a.split('/').map(Number);
+        const [diaB, mesB, anoB] = b.split('/').map(Number);
+        return new Date(anoA, mesA - 1, diaA) - new Date(anoB, mesB - 1, diaB);
+      });
 
       const filtro = document.getElementById("filtroAtividades");
       filtro.innerHTML = '<option value="TODAS">Todas as atividades</option>';
@@ -460,7 +487,7 @@
       const exportarTodas = selecionada === "TODAS";
 
       const container = document.getElementById("tabelaContainer");
-      
+
       if (Object.keys(dadosOrganizados).length === 0) {
         container.innerHTML = `
           <div class="empty-state">
@@ -473,7 +500,8 @@
       }
 
       const tabela = document.createElement("table");
-      let header = "<tr><th>Local</th><th>Promotor</th><th>Atividade</th>";
+      // Cabeçalho com a ordem solicitada
+      let header = "<tr><th>Razão Social</th><th>Local</th><th>Endereço</th><th>CEP</th><th>Bairro</th><th>Município</th><th>UF</th><th>Promotor</th><th>Atividade</th>";
       header += datas.map(d => `<th>${d}</th>`).join("") + "<th>Total</th></tr>";
 
       let linhas = "";
@@ -492,7 +520,17 @@
       }
 
       itensFiltrados.forEach(item => {
-        let linha = `<td>${item.Local}</td><td>${item.Promotor}</td><td>${item.Atividade}</td>`;
+        let linha = `
+          <td>${item.RazaoSocial}</td>
+          <td>${item.Local}</td>
+          <td>${item.Endereco}</td>
+          <td>${item.CEP}</td>
+          <td>${item.Bairro}</td>
+          <td>${item.Municipio}</td>
+          <td>${item.UF}</td>
+          <td>${item.Promotor}</td>
+          <td>${item.Atividade}</td>
+        `;
         datas.forEach(d => {
           const valor = item.datas[d];
           if (valor === 1) linha += '<td class="executado">1</td>';
@@ -523,52 +561,60 @@
         const wb = new ExcelJS.Workbook();
         const ws = wb.addWorksheet("Relatório");
 
+        // Cabeçalho com a ordem solicitada
         const linhas = [];
-        tabela.querySelectorAll("tr").forEach(tr => {
-          const linha = [];
-          tr.querySelectorAll("th, td").forEach(cell => {
-            linha.push(cell.innerText);
-          });
-          linhas.push(linha);
+        let header = ["Razão Social", "Local", "Endereço", "CEP", "Bairro", "Município", "UF", "Promotor", "Atividade", ...datas, "Total"];
+        linhas.push(header);
+
+        // Copiar as linhas renderizadas (ignora o cabeçalho da tabela HTML)
+        tabela.querySelectorAll("tr").forEach((tr, index) => {
+          if (index > 0) {
+            const linha = [];
+            tr.querySelectorAll("th, td").forEach(cell => {
+              linha.push(cell.innerText);
+            });
+            if (linha.length > 0) {
+              linhas.push(linha);
+            }
+          }
         });
 
+        // Escrever e formatar
         linhas.forEach((linha, i) => {
-          const atividade = linha[2];
-          if (i === 0 || exportarTodas || atividade === selecionada) {
-            const row = ws.addRow(linha);
-            row.alignment = { vertical: "middle", horizontal: "center" };
+          const row = ws.addRow(linha);
+          row.alignment = { vertical: "middle", horizontal: "center" };
 
-            linha.forEach((valor, j) => {
-              const cell = row.getCell(j + 1);
-              cell.border = {
-                top: { style: "thin" },
-                left: { style: "thin" },
-                bottom: { style: "thin" },
-                right: { style: "thin" }
+          linha.forEach((valor, j) => {
+            const cell = row.getCell(j + 1);
+            cell.border = {
+              top: { style: "thin" },
+              left: { style: "thin" },
+              bottom: { style: "thin" },
+              right: { style: "thin" }
+            };
+
+            if (i === 0) {
+              cell.font = { bold: true, color: { argb: "FFFFFF" } };
+              cell.fill = {
+                type: "pattern",
+                pattern: "solid",
+                fgColor: { argb: "000000" }
               };
-
-              if (i === 0) {
-                cell.font = { bold: true, color: { argb: "FFFFFF" } };
-                cell.fill = {
-                  type: "pattern",
-                  pattern: "solid",
-                  fgColor: { argb: "000000" }
-                };
-              } else {
-                const isColunaData = j >= 3 && j < linha.length - 1;
-                if (isColunaData) {
-                  if (valor === "1") {
-                    cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "C6EFCE" } };
-                  } else if (valor === "0") {
-                    cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FFC7CE" } };
-                  } else if (valor === "-") {
-                    cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "F2F2F2" } };
-                  }
+            } else {
+              // datas começam após 9 colunas fixas (0..8)
+              const isColunaData = j >= 9 && j < linha.length - 1;
+              if (isColunaData) {
+                if (valor === "1") {
+                  cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "C6EFCE" } };
+                } else if (valor === "0") {
+                  cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FFC7CE" } };
+                } else if (valor === "-") {
+                  cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "F2F2F2" } };
                 }
-                cell.font = { color: { argb: "000000" } };
               }
-            });
-          }
+              cell.font = { color: { argb: "000000" } };
+            }
+          });
         });
 
         // Auto ajustar largura das colunas
@@ -595,5 +641,5 @@
     });
   </script>
 </body>
-</html>
 
+</html>
